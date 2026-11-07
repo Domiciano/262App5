@@ -11,7 +11,7 @@ La convención del curso: **a lo largo de las capas se retorna el `Stream`, y so
 ## Cómo correrlo
 
 1. Pon la `Project URL` y la `publishable key` de **tu** proyecto de Supabase en `lib/main.dart`.
-2. Copia en este proyecto la carpeta `supabase/` de tu Laboratorio 7. Ya está conectada a tu proyecto y conoce sus migraciones.
+2. Conéctate a tu proyecto y trae las migraciones anteriores: `npx supabase init`, `npx supabase link --project-ref TU_IDENTIFICADOR` y `npx supabase migration fetch --linked`.
 3. Sigue la *Preparación* de la guía para crear la tabla `messages` y activarle Realtime.
 4. Corre la app:
 
