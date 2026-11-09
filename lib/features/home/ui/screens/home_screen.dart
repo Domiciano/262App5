@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
           title: Text(_index == 0 ? 'Muro' : 'Perfil'),
           actions: [
             IconButton(
-              onPressed: () => Navigator.pushNamed(context, '/chat'),
+              onPressed: () => Navigator.pushNamed(context, '/contacts'),
               icon: const Icon(Icons.chat_bubble_outline),
               tooltip: 'Chat',
             ),

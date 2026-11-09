@@ -18,6 +18,11 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
+  Future<List<Profile>> getProfiles() {
+    return _dataSource.getProfiles();
+  }
+
+  @override
   Future<void> updateAvatarPath(String id, String path) async {
     return _dataSource.updateAvatarPath(id, path);
   }

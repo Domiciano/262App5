@@ -22,8 +22,13 @@ import 'package:moviles_auth/features/chat/domain/usecases/load_older_messages_u
 import 'package:moviles_auth/features/chat/domain/usecases/pick_chat_image_usecase.dart';
 import 'package:moviles_auth/features/chat/domain/usecases/send_message_usecase.dart';
 import 'package:moviles_auth/features/chat/domain/usecases/watch_messages_usecase.dart';
-import 'package:moviles_auth/features/chat/ui/bloc/chat_bloc.dart';
 import 'package:moviles_auth/features/compose/ui/bloc/compose_bloc.dart';
+import 'package:moviles_auth/features/conversations/data/repository/conversation_repository_impl.dart';
+import 'package:moviles_auth/features/conversations/data/source/supabase_conversation_data_source.dart';
+import 'package:moviles_auth/features/conversations/domain/repository/conversation_repository.dart';
+import 'package:moviles_auth/features/conversations/domain/usecases/get_contacts_usecase.dart';
+import 'package:moviles_auth/features/conversations/domain/usecases/open_conversation_usecase.dart';
+import 'package:moviles_auth/features/conversations/ui/bloc/contacts_bloc.dart';
 import 'package:moviles_auth/features/home/ui/bloc/feed_bloc.dart';
 import 'package:moviles_auth/features/login/ui/bloc/login_bloc.dart';
 import 'package:moviles_auth/features/posts/data/repository/post_repository_impl.dart';
@@ -48,12 +53,16 @@ void initDependencies() {
   sl.registerLazySingleton(() => SupabasePostImageDataSource());
   sl.registerLazySingleton(() => SupabaseMessageDataSource());
   sl.registerLazySingleton(() => SupabaseChatImageDataSource());
+  sl.registerLazySingleton(() => SupabaseConversationDataSource());
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
   sl.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl());
   sl.registerLazySingleton<AvatarRepository>(() => AvatarRepositoryImpl());
   sl.registerLazySingleton<PostRepository>(() => PostRepositoryImpl());
   sl.registerLazySingleton<MessageRepository>(() => MessageRepositoryImpl());
+  sl.registerLazySingleton<ConversationRepository>(
+    () => ConversationRepositoryImpl(),
+  );
 
   sl.registerLazySingleton(() => SignInUseCase());
   sl.registerLazySingleton(() => SignUpUseCase());
@@ -69,10 +78,12 @@ void initDependencies() {
   sl.registerLazySingleton(() => LoadOlderMessagesUseCase());
   sl.registerLazySingleton(() => SendMessageUseCase());
   sl.registerLazySingleton(() => PickChatImageUseCase());
+  sl.registerLazySingleton(() => GetContactsUseCase());
+  sl.registerLazySingleton(() => OpenConversationUseCase());
 
   sl.registerFactory(() => LoginBloc());
   sl.registerFactory(() => RegisterBloc());
   sl.registerFactory(() => FeedBloc());
   sl.registerFactory(() => ComposeBloc());
-  sl.registerFactory(() => ChatBloc());
+  sl.registerFactory(() => ContactsBloc());
 }

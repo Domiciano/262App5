@@ -6,8 +6,16 @@ import 'package:moviles_auth/injection_container.dart';
 class LoadOlderMessagesUseCase {
   final MessageRepository _messages = sl();
 
-  Future<List<Message>> call(DateTime before, {required int limit}) async {
-    final older = await _messages.fetchBefore(before, limit: limit);
+  Future<List<Message>> call(
+    String conversationId,
+    DateTime before, {
+    required int limit,
+  }) async {
+    final older = await _messages.fetchBefore(
+      conversationId,
+      before,
+      limit: limit,
+    );
     return Future.wait(older.map(_withImage));
   }
 

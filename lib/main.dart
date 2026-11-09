@@ -7,6 +7,9 @@ import 'package:moviles_auth/features/chat/ui/bloc/chat_bloc.dart';
 import 'package:moviles_auth/features/chat/ui/screens/chat_screen.dart';
 import 'package:moviles_auth/features/compose/ui/bloc/compose_bloc.dart';
 import 'package:moviles_auth/features/compose/ui/screens/compose_screen.dart';
+import 'package:moviles_auth/features/conversations/domain/entities/conversation.dart';
+import 'package:moviles_auth/features/conversations/ui/bloc/contacts_bloc.dart';
+import 'package:moviles_auth/features/conversations/ui/screens/contacts_screen.dart';
 import 'package:moviles_auth/features/home/ui/bloc/feed_bloc.dart';
 import 'package:moviles_auth/features/home/ui/screens/home_screen.dart';
 import 'package:moviles_auth/features/login/ui/bloc/login_bloc.dart';
@@ -53,10 +56,18 @@ class App extends StatelessWidget {
           create: (_) => sl<ComposeBloc>(),
           child: const ComposeScreen(),
         ),
-        '/chat': (_) => BlocProvider(
-          create: (_) => sl<ChatBloc>(),
-          child: const ChatScreen(),
+        '/contacts': (_) => BlocProvider(
+          create: (_) => sl<ContactsBloc>(),
+          child: const ContactsScreen(),
         ),
+        '/chat': (context) {
+          final conversation =
+              ModalRoute.of(context)!.settings.arguments as Conversation;
+          return BlocProvider(
+            create: (_) => ChatBloc(conversation),
+            child: const ChatScreen(),
+          );
+        },
       },
     );
   }

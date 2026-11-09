@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:moviles_auth/features/auth/domain/entities/profile.dart';
 import 'package:moviles_auth/features/avatar/domain/entities/picked_photo.dart';
 import 'package:moviles_auth/features/chat/domain/entities/message.dart';
 import 'package:moviles_auth/features/chat/ui/bloc/chat_bloc.dart';
@@ -10,9 +11,16 @@ import 'package:moviles_auth/features/chat/ui/bloc/chat_event.dart';
 import 'package:moviles_auth/features/chat/ui/bloc/chat_state.dart';
 import 'package:moviles_auth/features/chat/ui/components/message_bubble.dart';
 import 'package:moviles_auth/features/chat/ui/screens/chat_screen.dart';
+import 'package:moviles_auth/features/conversations/domain/entities/conversation.dart';
 
 class _FakeChatBloc extends Bloc<ChatEvent, ChatState> implements ChatBloc {
   final events = <ChatEvent>[];
+
+  @override
+  final conversation = const Conversation(
+    id: 'c1',
+    contact: Profile(id: 'u2', username: 'ana', fullName: 'Ana Ruiz'),
+  );
 
   _FakeChatBloc(List<Message> messages)
     : super(ChatState(status: ChatStatus.success, messages: messages)) {
@@ -140,6 +148,11 @@ void main() {
       find.text('Aún no hay mensajes. Escribe el primero.'),
       findsOneWidget,
     );
+  });
+
+  testWidgets('the app bar shows who I am chatting with', (tester) async {
+    await _pump(tester, const []);
+    expect(find.text('Ana Ruiz'), findsOneWidget);
   });
 
   testWidgets('my messages go right and the others go left', (tester) async {

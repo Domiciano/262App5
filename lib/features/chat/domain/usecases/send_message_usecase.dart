@@ -6,10 +6,14 @@ import 'package:moviles_auth/injection_container.dart';
 class SendMessageUseCase {
   final MessageRepository _messages = sl();
 
-  Future<void> call(String content, {PickedPhoto? photo}) async {
+  Future<void> call(
+    String conversationId,
+    String content, {
+    PickedPhoto? photo,
+  }) async {
     final text = content.trim();
     if (text.isEmpty && photo == null) return;
     final path = photo == null ? null : await _messages.uploadImage(photo);
-    await _messages.send(text, imagePath: path);
+    await _messages.send(conversationId, text, imagePath: path);
   }
 }

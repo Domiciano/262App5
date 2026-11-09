@@ -6,8 +6,10 @@ import 'package:moviles_auth/injection_container.dart';
 class WatchMessagesUseCase {
   final MessageRepository _messages = sl();
 
-  Stream<List<Message>> call({required int limit}) {
-    return _messages.watchLatest(limit: limit).asyncMap(_withImages);
+  Stream<List<Message>> call(String conversationId, {required int limit}) {
+    return _messages
+        .watchLatest(conversationId, limit: limit)
+        .asyncMap(_withImages);
   }
 
   Future<List<Message>> _withImages(List<Message> messages) {

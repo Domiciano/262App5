@@ -20,19 +20,32 @@ class SupabaseProfileDataSource {
   Future<Profile> getProfile(String id) async {
     try {
       final row = await _client.from('profiles').select().eq('id', id).single();
-      String? path = row['avatar_path'] as String?;
-      return Profile(
-        id: row['id'] as String,
-        username: row['username'] as String,
-        fullName: row['full_name'] as String,
-        avatarPath: path,
-        avatarUrl: path == null
-            ? null
-            : _client.storage.from('avatars').getPublicUrl(path),
-      );
+      return _toProfile(row);
     } on PostgrestException catch (e) {
       throw Exception(e.message);
     }
+  }
+
+  Future<List<Profile>> getProfiles() async {
+    try {
+      final rows = await _client.from('profiles').select();
+      return rows.map(_toProfile).toList();
+    } on PostgrestException catch (e) {
+      throw Exception(e.message);
+    }
+  }
+
+  Profile _toProfile(Map<String, dynamic> row) {
+    final path = row['avatar_path'] as String?;
+    return Profile(
+      id: row['id'] as String,
+      username: row['username'] as String,
+      fullName: row['full_name'] as String,
+      avatarPath: path,
+      avatarUrl: path == null
+          ? null
+          : _client.storage.from('avatars').getPublicUrl(path),
+    );
   }
 
   Future<void> updateAvatarPath(String id, String path) async {

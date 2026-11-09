@@ -2,6 +2,7 @@ import 'package:moviles_auth/features/chat/domain/entities/message.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// The only file that talks to the messages table, by Realtime and by plain queries.
+/// Every query is about one conversation.
 class SupabaseMessageDataSource {
   static const table = 'messages';
 
@@ -11,16 +12,21 @@ class SupabaseMessageDataSource {
     return _client.auth.currentUser!.id;
   }
 
-  Stream<List<Message>> watchLatest({required int limit}) {
+  Stream<List<Message>> watchLatest(
+    String conversationId, {
+    required int limit,
+  }) {
     return _client
         .from(table)
         .stream(primaryKey: ['id'])
+        .eq('conversation_id', conversationId)
         .order('created_at', ascending: false)
         .limit(limit)
         .map((rows) => rows.map(_toMessage).toList());
   }
 
   Future<List<Message>> fetchBefore(
+    String conversationId,
     DateTime before, {
     required int limit,
   }) async {
@@ -28,6 +34,7 @@ class SupabaseMessageDataSource {
       final rows = await _client
           .from(table)
           .select()
+          .eq('conversation_id', conversationId)
           .lt('created_at', before.toUtc().toIso8601String())
           .order('created_at', ascending: false)
           .limit(limit);
@@ -37,9 +44,14 @@ class SupabaseMessageDataSource {
     }
   }
 
-  Future<void> send(String content, {String? imagePath}) async {
+  Future<void> send(
+    String conversationId,
+    String content, {
+    String? imagePath,
+  }) async {
     try {
       await _client.from(table).insert({
+        'conversation_id': conversationId,
         'sender_id': _uid,
         'content': content,
         'image_path': imagePath,

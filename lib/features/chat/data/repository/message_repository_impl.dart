@@ -14,18 +14,29 @@ class MessageRepositoryImpl implements MessageRepository {
   final Map<String, String> _urls = {};
 
   @override
-  Stream<List<Message>> watchLatest({required int limit}) {
-    return _messages.watchLatest(limit: limit);
+  Stream<List<Message>> watchLatest(
+    String conversationId, {
+    required int limit,
+  }) {
+    return _messages.watchLatest(conversationId, limit: limit);
   }
 
   @override
-  Future<List<Message>> fetchBefore(DateTime before, {required int limit}) {
-    return _messages.fetchBefore(before, limit: limit);
+  Future<List<Message>> fetchBefore(
+    String conversationId,
+    DateTime before, {
+    required int limit,
+  }) {
+    return _messages.fetchBefore(conversationId, before, limit: limit);
   }
 
   @override
-  Future<void> send(String content, {String? imagePath}) {
-    return _messages.send(content, imagePath: imagePath);
+  Future<void> send(
+    String conversationId,
+    String content, {
+    String? imagePath,
+  }) {
+    return _messages.send(conversationId, content, imagePath: imagePath);
   }
 
   @override
