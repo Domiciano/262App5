@@ -2,17 +2,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moviles_auth/features/chat/ui/bloc/chat_event.dart';
 import 'package:moviles_auth/features/chat/ui/bloc/chat_state.dart';
+import 'package:moviles_auth/features/conversations/domain/entities/conversation.dart';
 
 // LAB parte 1 (chat sencillo en tiempo real)
 // LAB parte 2 (paginación: al llegar arriba, pedir los 5 mensajes anteriores)
 // LAB parte 3 (agregar imagen, esta por medio de un bucket privado)
 
-/// Listens to the latest messages, pages back through older ones and sends new ones.
+/// Listens to the latest messages of one conversation, pages back and sends new ones.
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   static const liveSize = 15;
   static const pageSize = 5;
 
-  ChatBloc() : super(const ChatState()) {
+  final Conversation conversation;
+
+  ChatBloc(this.conversation) : super(const ChatState()) {
     on<ChatStarted>(_onStarted);
     on<MessagesUpdated>(_onMessagesUpdated);
     on<ChatStreamFailed>(_onStreamFailed);

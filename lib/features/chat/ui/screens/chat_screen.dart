@@ -6,9 +6,10 @@ import 'package:moviles_auth/features/chat/ui/bloc/chat_event.dart';
 import 'package:moviles_auth/features/chat/ui/bloc/chat_state.dart';
 import 'package:moviles_auth/features/chat/ui/components/message_bubble.dart';
 import 'package:moviles_auth/features/chat/ui/components/message_composer.dart';
+import 'package:moviles_auth/components/avatar.dart';
 import 'package:moviles_auth/theme/app_theme.dart';
 
-/// The general chat room: the messages, newest at the bottom, and the composer.
+/// The chat with one contact: the messages, newest at the bottom, and the composer.
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 
@@ -100,7 +101,25 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ],
       child: Scaffold(
-        appBar: AppBar(title: const Text('Chat')),
+        appBar: AppBar(
+          titleSpacing: 0,
+          title: Row(
+            children: [
+              Avatar(
+                url: bloc.conversation.contact.avatarUrl,
+                name: bloc.conversation.contact.fullName,
+                size: 32,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  bloc.conversation.contact.fullName,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
         body: SafeArea(
           child: BlocBuilder<ChatBloc, ChatState>(
             builder: (context, state) {
